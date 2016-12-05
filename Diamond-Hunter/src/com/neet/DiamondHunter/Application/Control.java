@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import com.neet.DiamondHunter.Entity.Item;
 import com.neet.DiamondHunter.Manager.Content;
+import com.neet.DiamondHunter.TileMap.Tile;
 import com.neet.DiamondHunter.TileMap.TileMap;
 
 import javafx.collections.FXCollections;
@@ -26,7 +27,7 @@ import javafx.scene.input.MouseEvent;
 public class Control {
 	
 	@FXML GridPane mapGridPane;
-	ImageView tile;
+	ImageView tile, axeTile, boatTile;
 	Image tileImage, itemImage;
 	
 	private TileMap tileMap;
@@ -70,6 +71,7 @@ public class Control {
 				tileImage = getTileImage(i, j);
 				
 				tile.setImage(tileImage);
+				
 				tile.setOnMouseClicked(new EventHandler<MouseEvent>(){
 					
 					@Override
@@ -83,9 +85,14 @@ public class Control {
 							Integer rowIndex = GridPane.getRowIndex(grid);
 							Integer colIndex = GridPane.getColumnIndex(grid);
 							
-							addItem(rowIndex, colIndex);
-							System.out.printf("Mouse entered cell [%d, %d]%n", colIndex.intValue(), rowIndex.intValue());
-							System.out.println(addingStatus);
+							if(canAdd(rowIndex, colIndex)){
+								addItem(rowIndex, colIndex);
+								System.out.printf("Mouse entered cell [%d, %d]%n", colIndex.intValue(), rowIndex.intValue());
+								System.out.println(addingStatus);
+							}
+							else{
+								System.out.printf("Invalid target position [%d, %d]%n", colIndex.intValue(), rowIndex.intValue());
+							}
 						}
 						
 					}});
@@ -199,30 +206,49 @@ public class Control {
 		return -1;
 	}
 	
+	private boolean canAdd(int row, int col){
+		//int rc = tileMap.getIndex(row, col);
+		if(tileMap.getType(row,col) == Tile.BLOCKED){
+			return false;
+		}
+		
+		return true;
+		
+	}
+	
 	private void showItem(int preRow, int preCol, int row, int col){
 
-		int index;
-		Item item;
-		
-		if(preRow != -1 && preCol !=-1){ //has been added
-			//delete previous image
-		}
-		
-		//assign item image by type
-		if(addingStatus == 1){
-
-			itemImage = axe;
-		}
-		else if(addingStatus == 0){
-
-			itemImage = boat;
-		}
+		if(preRow == -1 && preCol ==-1){	//first added
 			
-		//show item on screen
-		tile = new ImageView();
-		mapGridPane.add(tile, col, row);
+			if(addingStatus == 1){	//adding axe
+				
+				axeTile = new ImageView();
+				mapGridPane.add(axeTile, col, row);
+				
+				axeTile.setImage(axe);
+			}
+			else if(addingStatus == 0){	//adding boat
+				
+				boatTile = new ImageView();
+				mapGridPane.add(boatTile, col, row);
+				
+				boatTile.setImage(boat);
+			}
+		}
+		else{								//has been added
 			
-		tile.setImage(itemImage);
+			if(addingStatus == 1){	//adding axe
+				
+				GridPane.setColumnIndex(axeTile, col);
+				GridPane.setRowIndex(axeTile, row);
+			}
+			else if(addingStatus == 0){	//adding boat
+				
+				GridPane.setColumnIndex(boatTile, col);
+				GridPane.setRowIndex(boatTile, row);
+			}
+			
+		}
 
 	}
 	
