@@ -7,6 +7,10 @@ package com.neet.DiamondHunter.GameState;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import com.neet.DiamondHunter.Entity.Diamond;
@@ -173,7 +177,7 @@ public class PlayState extends GameState {
 	private void populateItems() {
 		
 		Item item;
-		
+	/*	
 		item = new Item(tileMap);
 		item.setType(Item.AXE);
 		item.setTilePosition(26, 37);
@@ -183,6 +187,18 @@ public class PlayState extends GameState {
 		item.setType(Item.BOAT);
 		item.setTilePosition(12, 4);
 		items.add(item);
+	*/	
+		String filename = "itemPosition.data";
+        try {
+            //File file = new File(filename);
+            FileInputStream fis = new FileInputStream(filename);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            items = (ArrayList<Item>) ois.readObject();
+            //oos.writeObject(items.get(1));
+            ois.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 		
 	}
 	

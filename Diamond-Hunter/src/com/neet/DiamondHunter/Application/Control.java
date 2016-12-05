@@ -2,6 +2,10 @@ package com.neet.DiamondHunter.Application;
 
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.neet.DiamondHunter.Entity.Item;
@@ -134,7 +138,36 @@ public class Control {
 
 	@FXML public void onOkButtonClicked() {
 		
+		//check whether both items are added
+		if(items.size() != 2){
+			System.out.println("Please add both items!");
+			return;
+		}
+		
+		Item item1 = items.get(0);
+		//get item position
+		int iType0 = item1.getType();
+		int iRow0 = item1.getx();
+		int iCol0 = item1.getCol();
+		
+		int iType1 = items.get(1).getType();
+		int iRow1 = items.get(1).getRow();
+		int iCol1 = items.get(0).getCol();
+		
+		//String x = String.format("%d\n%d\n%d\n%d\n%d\n%d\n",items.get(0).getType(), items.get(0).getRow(), items.get(1).getCol(), items.get(1).getType(), items.get(1).getRow(), items.get(1).getCol());
+		System.out.println(iRow0);
 		//save file
+		String filename = "itemPosition.txt";
+        BufferedWriter bw;
+        try {
+            File file = new File(filename);
+            bw = new BufferedWriter(new FileWriter(file));
+            bw.write("fnudkfhsekhf\n");
+            bw.close();
+        } catch ( IOException e ) {
+            e.printStackTrace();
+        }
+		
 		//close window
 		Stage thisStage = (Stage) okButton.getScene().getWindow();
 		thisStage.close();
@@ -162,7 +195,8 @@ public class Control {
 			
 			//set item position
 			item.setTilePosition(row, col);
-			
+			System.out.println(item.getx());
+			System.out.println(item.gety());
 			//add to items arraylist
 			items.add(item);
 			
@@ -179,7 +213,8 @@ public class Control {
 			previousCol = item.getCol();
 			//update position
 			item.setTilePosition(row, col);
-			
+			System.out.println(item.getx());
+			System.out.println(item.gety());
 			showItem(previousRow, previousCol, row, col);
 		}
 	}
