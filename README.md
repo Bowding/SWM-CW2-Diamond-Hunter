@@ -1,1 +1,1 @@
-G52SWM CW2 Diamond Hunter source code
+Diamond Hunter
