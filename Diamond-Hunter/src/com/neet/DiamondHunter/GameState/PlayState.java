@@ -8,11 +8,7 @@ package com.neet.DiamondHunter.GameState;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -177,6 +173,7 @@ public class PlayState extends GameState {
 		
 	}
 	
+	//populateItems() changed to reading item position from file
 	private void populateItems() {
 		
 		Item item;

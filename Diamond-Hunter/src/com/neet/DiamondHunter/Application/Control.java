@@ -1,22 +1,20 @@
+/**
+ * Controller of map.fxml file
+ * Contain event handlers for elements in fxml file, and Control behaviours of the application
+ * @author psynw1 (Ning WANG)
+ */
+
 package com.neet.DiamondHunter.Application;
 
-
-import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Optional;
-
 import com.neet.DiamondHunter.Entity.Item;
 import com.neet.DiamondHunter.Manager.Content;
 import com.neet.DiamondHunter.TileMap.Tile;
 import com.neet.DiamondHunter.TileMap.TileMap;
-
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.scene.layout.GridPane;
@@ -25,29 +23,22 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 
 public class Control {
 	
-	@FXML GridPane mapGridPane;
-	ImageView tile, axeTile, boatTile;
-	Image tileImage, itemImage;
-	
+	private ImageView tile, axeTile, boatTile;
 	private TileMap tileMap;
-	private Image image;
 	private int rowNum, colNum;
-	private Image boat;
-	private Image axe;
+	private Image axe, boat, tileImage;
 	private ArrayList<Item> items;
 	private int addingStatus = -1;	//-1:adding nothing; 0:adding boat; 1:adding axe
 
-	//private Graphics2D g = (Graphics2D) image.getGraphics();
+	@FXML GridPane mapGridPane;
 	@FXML ComboBox<String> myComboBox;
 	@FXML ImageView axeImageView;
 	@FXML ImageView boatImageView;
@@ -55,6 +46,9 @@ public class Control {
 	@FXML Button addBoatButton;
 	@FXML Button okButton;
 	
+	/**
+	 * Initialisation for Control class
+	 */
 	public void initialize() {
 		
 		items = new ArrayList<Item>();
@@ -68,7 +62,7 @@ public class Control {
 		rowNum = tileMap.getNumRows();
 		colNum = tileMap.getNumCols();
 		
-		//draw map
+		//draw game map
 		int i, j;
 		for(i = 0; i < rowNum; i++){
 			
@@ -76,11 +70,11 @@ public class Control {
 				
 				tile = new ImageView();
 				mapGridPane.add(tile, j, i);
-				
+			
 				tileImage = getTileImage(i, j);
-				
 				tile.setImage(tileImage);
 				
+				//assign new mouse clicked event handler to every tile
 				tile.setOnMouseClicked(new EventHandler<MouseEvent>(){
 					
 					@Override
@@ -100,17 +94,34 @@ public class Control {
 					       
 						}
 						else{
+							
+							//get selected position
 							ImageView grid = (ImageView) event.getSource();
 							Integer rowIndex = GridPane.getRowIndex(grid);
 							Integer colIndex = GridPane.getColumnIndex(grid);
 							
+							//position validation
 							if(canAdd(rowIndex, colIndex)){
+								
+								//add item if the target position is valid
 								addItem(rowIndex, colIndex);
-								System.out.printf("Mouse entered cell [%d, %d]%n", rowIndex.intValue(), colIndex.intValue());
-								System.out.println(addingStatus);
+								
+								//System.out.printf("Mouse entered cell [%d, %d]%n", rowIndex.intValue(), colIndex.intValue());
+								//System.out.println(addingStatus);
 							}
 							else{
-								System.out.printf("Invalid target position [%d, %d]%n", rowIndex.intValue(), colIndex.intValue());
+								
+								//show warning alert if try to add to an invalid tile
+						        event.consume();
+
+						        Alert alert = new Alert(AlertType.WARNING);
+						        alert.setTitle("Warning");
+						        alert.setHeaderText("Invalid target position");
+						        alert.setContentText("Please add to another position : )");
+
+						        alert.showAndWait();
+						        
+								//System.out.printf("Invalid target position [%d, %d]%n", rowIndex.intValue(), colIndex.intValue());
 							}
 						}
 						
@@ -124,8 +135,16 @@ public class Control {
 		
 		boatImageView.setImage(boat);
 		axeImageView.setImage(axe);
+		
 	}
 	
+	
+	/**
+	 * Return tile image by coordinates
+	 * @param row
+	 * @param col
+	 * @return	tile image
+	 */
 	private Image getTileImage(int row, int col){
 		
 		int numTilesAcross = tileMap.getNumTilesAcross();
@@ -139,18 +158,26 @@ public class Control {
 		
 	}
 
+	/**
+	 * Change adding status when addAxeButton or addBoatButton clicked
+	 * @param event
+	 */
 	@FXML public void onAddButtonClicked(ActionEvent event) {
 		
 		if(event.getSource() == addAxeButton){
+			
 			addingStatus = 1;	//adding an axe
-			//System.out.println(addingStatus);
 		}
 		else if(event.getSource() == addBoatButton){
+			
 			addingStatus = 0;	//adding a boat
-			//System.out.println(addingStatus);
 		}
 	}
 
+	/**
+	 * Write positions of axe and boat to file and close window when OK button clicked
+	 * @param event
+	 */
 	@FXML public void onOkButtonClicked(ActionEvent event) {
 		
 		//check whether both items are added
@@ -172,7 +199,7 @@ public class Control {
 		Item item0 = items.get(0);
 		Item item1 = items.get(1);
 		
-		//get item position and position
+		//get item type and position
 		int iType0 = item0.getType();
 		int iRow0 = item0.getx();
 		int iCol0 = item0.gety();
@@ -182,8 +209,8 @@ public class Control {
 		int iCol1 = item1.gety();
 		
 		String fileInString = String.format("%d\n%d\n%d\n%d\n%d\n%d\n", iType0, iRow0, iCol0, iType1, iRow1, iCol1);
-		System.out.println(fileInString);
-		//save file
+
+		//write to file
 		String filename = "itemPosition.data";
         BufferedWriter bw;
         try {
@@ -200,6 +227,11 @@ public class Control {
 		thisStage.close();
 	}
 	
+	/**
+	 * Add item to assigned coordinates and control display of added item
+	 * @param row
+	 * @param col
+	 */
 	private void addItem(int row, int col){
 		
 		Item item;
@@ -213,40 +245,46 @@ public class Control {
 			//set item type
 			if(addingStatus == 1){
 				item.setType(Item.AXE);
-				//itemImage = axe;
 			}
 			else if(addingStatus == 0){
 				item.setType(Item.BOAT);
-				//itemImage = boat;
 			}
 			
 			//set item position
 			item.setPosition(row, col);
-			System.out.println(item.getx());
-			System.out.println(item.gety());
+			
 			//add to items arraylist
 			items.add(item);
 			
-			//show item on screen
+			//display to screen
 			showItem(-1, -1, row, col);
 			
 		}
-		else{		//added to the ith position on the items Arraylist
+		else{						//has been added
 			
+			//get previously added axe/boat index in arraylist
 			index = isItemAdded();
 			item = items.get(index);
 			
+			//copy previous coordinates
 			previousRow = item.getx();
 			previousCol = item.gety();
+			
 			//update position
 			item.setPosition(row, col);
 			System.out.println(item.getx());
 			System.out.println(item.gety());
+			
+			//display to screen
 			showItem(previousRow, previousCol, row, col);
 		}
 	}
 
-	//if this item is added return the index previously added to, otherwise return -1
+	/**
+	 * Check whether this type of item has been added before
+	 * if so return the index previously added to, otherwise return -1
+	 * @return -1 or index of previously added item 
+	 */
 	private int isItemAdded(){
 		
 		if(items.size() == 1){
@@ -278,6 +316,13 @@ public class Control {
 		
 	}
 	
+	/**
+	 * Display item image on screen or update the image position if added before
+	 * @param preRow
+	 * @param preCol
+	 * @param row
+	 * @param col
+	 */
 	private void showItem(int preRow, int preCol, int row, int col){
 
 		if(preRow == -1 && preCol ==-1){	//first added

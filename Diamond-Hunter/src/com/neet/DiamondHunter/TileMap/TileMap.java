@@ -136,8 +136,11 @@ public class TileMap {
 	public int getHeight() { return height; }
 	public int getNumRows() { return numRows; }
 	public int getNumCols() { return numCols; }
+	
+	//2 getters added to provide data to Control class
 	public int getNumTilesAcross() { return numTilesAcross; }
 	public BufferedImage getTileImage(int row, int col){return tiles[row][col].getImage();}
+	
 	public int getType(int row, int col) {
 		int rc = map[row][col];
 		int r = rc / numTilesAcross;
