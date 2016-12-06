@@ -1,0 +1,21 @@
+/*style sheet to control button layout behaviours when focused or entered*/
+
+#addAxeButton:focused {
+    -fx-effect: innershadow( three-pass-box, rgba(0,0,0,0.7), 11, 0.5, 0, 2);
+}
+
+#addBoatButton:focused { 
+    -fx-effect: innershadow( three-pass-box, rgba(0,0,0,0.7), 11, 0.5, 0, 2);
+}
+
+#addAxeButton:hover { 
+    -fx-text-fill: white;
+}
+
+#addBoatButton:hover { 
+    -fx-text-fill: white;   
+}
+
+#okButton:hover { 
+    -fx-text-fill: white;   
+}
