@@ -7,12 +7,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import com.neet.DiamondHunter.Entity.Item;
 import com.neet.DiamondHunter.Manager.Content;
 import com.neet.DiamondHunter.TileMap.Tile;
 import com.neet.DiamondHunter.TileMap.TileMap;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -22,8 +24,11 @@ import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.Node;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
@@ -82,7 +87,17 @@ public class Control {
 					public void handle(MouseEvent event) {
 
 						if(addingStatus == -1){
-							System.out.println("Item not selected!");
+							
+							//show warning alert if no item type selected
+					        event.consume();
+
+					        Alert alert = new Alert(AlertType.WARNING);
+					        alert.setTitle("Warning");
+					        alert.setHeaderText("No item selected");
+					        alert.setContentText("Please select one item to add : )");
+
+					        alert.showAndWait();
+					       
 						}
 						else{
 							ImageView grid = (ImageView) event.getSource();
@@ -91,11 +106,11 @@ public class Control {
 							
 							if(canAdd(rowIndex, colIndex)){
 								addItem(rowIndex, colIndex);
-								System.out.printf("Mouse entered cell [%d, %d]%n", colIndex.intValue(), rowIndex.intValue());
+								System.out.printf("Mouse entered cell [%d, %d]%n", rowIndex.intValue(), colIndex.intValue());
 								System.out.println(addingStatus);
 							}
 							else{
-								System.out.printf("Invalid target position [%d, %d]%n", colIndex.intValue(), rowIndex.intValue());
+								System.out.printf("Invalid target position [%d, %d]%n", rowIndex.intValue(), colIndex.intValue());
 							}
 						}
 						
@@ -136,33 +151,45 @@ public class Control {
 		}
 	}
 
-	@FXML public void onOkButtonClicked() {
+	@FXML public void onOkButtonClicked(ActionEvent event) {
 		
 		//check whether both items are added
 		if(items.size() != 2){
-			System.out.println("Please add both items!");
+			
+			//show warning alert if items insufficient
+	        event.consume();
+	        
+	        Alert alert = new Alert(AlertType.WARNING);
+	        alert.setTitle("Warning");
+	        alert.setHeaderText("Please add both items : )");
+	        
+	        alert.showAndWait();
+			
 			return;
 		}
 		
-		Item item1 = items.get(0);
-		//get item position
-		int iType0 = item1.getType();
-		int iRow0 = item1.getx();
-		int iCol0 = item1.getCol();
+		//get item from arraylist
+		Item item0 = items.get(0);
+		Item item1 = items.get(1);
 		
-		int iType1 = items.get(1).getType();
-		int iRow1 = items.get(1).getRow();
-		int iCol1 = items.get(0).getCol();
+		//get item position and position
+		int iType0 = item0.getType();
+		int iRow0 = item0.getx();
+		int iCol0 = item0.gety();
 		
-		//String x = String.format("%d\n%d\n%d\n%d\n%d\n%d\n",items.get(0).getType(), items.get(0).getRow(), items.get(1).getCol(), items.get(1).getType(), items.get(1).getRow(), items.get(1).getCol());
-		System.out.println(iRow0);
+		int iType1 = item1.getType();
+		int iRow1 = item1.getx();
+		int iCol1 = item1.gety();
+		
+		String fileInString = String.format("%d\n%d\n%d\n%d\n%d\n%d\n", iType0, iRow0, iCol0, iType1, iRow1, iCol1);
+		System.out.println(fileInString);
 		//save file
-		String filename = "itemPosition.txt";
+		String filename = "itemPosition.data";
         BufferedWriter bw;
         try {
             File file = new File(filename);
             bw = new BufferedWriter(new FileWriter(file));
-            bw.write("fnudkfhsekhf\n");
+            bw.write(fileInString);
             bw.close();
         } catch ( IOException e ) {
             e.printStackTrace();
@@ -194,7 +221,7 @@ public class Control {
 			}
 			
 			//set item position
-			item.setTilePosition(row, col);
+			item.setPosition(row, col);
 			System.out.println(item.getx());
 			System.out.println(item.gety());
 			//add to items arraylist
@@ -209,10 +236,10 @@ public class Control {
 			index = isItemAdded();
 			item = items.get(index);
 			
-			previousRow = item.getRow();
-			previousCol = item.getCol();
+			previousRow = item.getx();
+			previousCol = item.gety();
 			//update position
-			item.setTilePosition(row, col);
+			item.setPosition(row, col);
 			System.out.println(item.getx());
 			System.out.println(item.gety());
 			showItem(previousRow, previousCol, row, col);

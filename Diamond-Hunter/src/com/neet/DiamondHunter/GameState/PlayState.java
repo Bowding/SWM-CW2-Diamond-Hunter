@@ -7,11 +7,14 @@ package com.neet.DiamondHunter.GameState;
 
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import com.neet.DiamondHunter.Entity.Diamond;
 import com.neet.DiamondHunter.Entity.Item;
@@ -177,29 +180,27 @@ public class PlayState extends GameState {
 	private void populateItems() {
 		
 		Item item;
-	/*	
-		item = new Item(tileMap);
-		item.setType(Item.AXE);
-		item.setTilePosition(26, 37);
-		items.add(item);
-		
-		item = new Item(tileMap);
-		item.setType(Item.BOAT);
-		item.setTilePosition(12, 4);
-		items.add(item);
-	*/	
 		String filename = "itemPosition.data";
-        try {
-            //File file = new File(filename);
-            FileInputStream fis = new FileInputStream(filename);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            items = (ArrayList<Item>) ois.readObject();
-            //oos.writeObject(items.get(1));
-            ois.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+		Scanner scanner;
 		
+		//open file to read in item type and position info
+		try {
+			scanner = new Scanner(new File(filename));
+			
+			item = new Item(tileMap);
+			item.setType(scanner.nextInt());
+			item.setTilePosition(scanner.nextInt(), scanner.nextInt());
+			items.add(item);
+		
+			item = new Item(tileMap);
+			item.setType(scanner.nextInt());
+			item.setTilePosition(scanner.nextInt(), scanner.nextInt());
+			items.add(item);
+		
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
 	}
 	
 	public void update() {
