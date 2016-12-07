@@ -211,7 +211,7 @@ public class Control {
 		String fileInString = String.format("%d\n%d\n%d\n%d\n%d\n%d\n", iType0, iRow0, iCol0, iType1, iRow1, iCol1);
 
 		//write to file
-		String filename = "itemPosition.data";
+		String filename = "Resources\\Maps\\itemPosition.data";
         BufferedWriter bw;
         try {
             File file = new File(filename);

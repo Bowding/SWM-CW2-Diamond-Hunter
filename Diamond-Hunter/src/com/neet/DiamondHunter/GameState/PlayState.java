@@ -177,7 +177,7 @@ public class PlayState extends GameState {
 	private void populateItems() {
 		
 		Item item;
-		String filename = "itemPosition.data";
+		String filename = "Resources\\Maps\\itemPosition.data";
 		Scanner scanner;
 		
 		//open file to read in item type and position info
