@@ -219,6 +219,16 @@ public class Control {
             bw.write(fileInString);
             bw.close();
         } catch ( IOException e ) {
+        	
+        	//if exception caught, using alert to give error message and print exception info in console
+	        event.consume();
+
+	        Alert alert = new Alert(AlertType.ERROR);
+	        alert.setTitle("Something went wrong...");
+	        alert.setHeaderText("Unable to save the settings");
+
+	        alert.showAndWait();
+        	
             e.printStackTrace();
         }
 		
