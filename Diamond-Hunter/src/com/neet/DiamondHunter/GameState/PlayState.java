@@ -196,7 +196,7 @@ public class PlayState extends GameState {
 		
 		} catch (FileNotFoundException e) {
 		    
-			//if file not found, use default settings, and print exception info
+			//if file not found, use default settings
 			item = new Item(tileMap);  
 			item.setType(Item.AXE);  
 			item.setTilePosition(26, 37);  
@@ -207,7 +207,6 @@ public class PlayState extends GameState {
 			item.setTilePosition(12, 4);  
 			items.add(item);  
 			
-			e.printStackTrace();
 		}
 
 	}

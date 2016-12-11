@@ -211,7 +211,7 @@ public class Control {
 		String fileInString = String.format("%d\n%d\n%d\n%d\n%d\n%d\n", iType0, iRow0, iCol0, iType1, iRow1, iCol1);
 
 		//write to file
-		String filename = "Resources\\Maps\\itemPosition.data";
+		String filename = "../Resources/Maps/itemPosition.data";
         BufferedWriter bw;
         try {
             File file = new File(filename);
@@ -220,7 +220,7 @@ public class Control {
             bw.close();
         } catch ( IOException e ) {
         	
-        	//if exception caught, using alert to give error message and print exception info in console
+        	//if exception caught, using alert to give error message
 	        event.consume();
 
 	        Alert alert = new Alert(AlertType.ERROR);
@@ -229,7 +229,6 @@ public class Control {
 
 	        alert.showAndWait();
         	
-            e.printStackTrace();
         }
 		
 		//close window
@@ -282,8 +281,6 @@ public class Control {
 			
 			//update position
 			item.setPosition(row, col);
-			System.out.println(item.getx());
-			System.out.println(item.gety());
 			
 			//display to screen
 			showItem(previousRow, previousCol, row, col);
