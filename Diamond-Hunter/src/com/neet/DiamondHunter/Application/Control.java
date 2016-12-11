@@ -220,7 +220,7 @@ public class Control {
             bw.close();
         } catch ( IOException e ) {
         	
-        	//if exception caught, using alert to give error message and print exception info in console
+        	//if exception caught, using alert to give error message
 	        event.consume();
 
 	        Alert alert = new Alert(AlertType.ERROR);
