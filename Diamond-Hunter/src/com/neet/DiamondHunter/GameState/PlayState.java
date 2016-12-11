@@ -207,7 +207,6 @@ public class PlayState extends GameState {
 			item.setTilePosition(12, 4);  
 			items.add(item);  
 			
-			e.printStackTrace();
 		}
 
 	}
