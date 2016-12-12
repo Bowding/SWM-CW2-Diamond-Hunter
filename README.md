@@ -11,5 +11,5 @@ Map viewer usage:
 If no error message is popped out, your settings are saved successfully! : )
 
 Additional info:
-DiamondHunter_MapViewer.jar is saved in bin folder. After setting the positions of items, the coordinates are saved in a .data file, and saved in Resources/Maps folder of the project folder.
+DiamondHunter_MapViewer.jar is saved in bin folder. After setting the positions of items, the coordinates are saved in a .data file, which is saved in Resources/Maps folder of the project folder.
 
