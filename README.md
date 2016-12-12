@@ -11,5 +11,5 @@ Map viewer usage:
 If no error message is popped out, your settings are saved successfully! : )
 
 Additional info:
-1. Two .jar files are saved in bin folder. One is the entry to the Map Viewer application, named DiamondHunter_MapViewer.jar. The other, DiamondHunter_Game.jar, is the main entry to the Diamond Hunter game. 
-2. Besides, to make sure these .jar files can find the given file path, the Resources folder is copied into bin.
+DiamondHunter_MapViewer.jar is saved in bin folder. After setting the positions of items, the coordinates are saved in a .data file, which is saved in Resources/Maps folder of the project folder.
+
