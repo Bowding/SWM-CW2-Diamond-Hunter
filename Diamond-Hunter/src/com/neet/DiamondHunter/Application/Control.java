@@ -213,6 +213,8 @@ public class Control {
 		//write to file
 		String filename = "../Resources/Maps/itemPosition.data";
         BufferedWriter bw;
+        
+        //suppose the application is run using jar in bin
         try {
             File file = new File(filename);
             bw = new BufferedWriter(new FileWriter(file));
@@ -220,14 +222,24 @@ public class Control {
             bw.close();
         } catch ( IOException e ) {
         	
-        	//if exception caught, using alert to give error message
-	        event.consume();
+        	//if application is run in eclipse
+        	try{
+        		File file = new File("Resources\\Maps\\itemPosition.data");
+                bw = new BufferedWriter(new FileWriter(file));
+                bw.write(fileInString);
+                bw.close();
 
-	        Alert alert = new Alert(AlertType.ERROR);
-	        alert.setTitle("Something went wrong...");
-	        alert.setHeaderText("Unable to save the settings");
-
-	        alert.showAndWait();
+        	} catch (IOException ioe){
+        	
+        		//if exception caught, using alert to give error message
+		        event.consume();
+	
+		        Alert alert = new Alert(AlertType.ERROR);
+		        alert.setTitle("Something went wrong...");
+		        alert.setHeaderText("Unable to save the settings");
+	
+		        alert.showAndWait();
+        	}
         	
         }
 		

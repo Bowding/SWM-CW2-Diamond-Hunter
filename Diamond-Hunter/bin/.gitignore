@@ -1,6 +1,11 @@
+/HUD/
+/Logo/
+/Maps/
+/Music/
+/com/
 /SFX/
 /Sprites/
 /Tilesets/
-/com/
-/Maps/
+/itemPosition.data
 .gitignore
+/.gitignore
