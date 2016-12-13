@@ -7,3 +7,5 @@
 /Sprites/
 /Tilesets/
 /itemPosition.data
+.gitignore
+/.gitignore
